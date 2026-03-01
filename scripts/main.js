@@ -14,9 +14,11 @@ new Vue({
                         <input v-model="newCardItems[index]" placeholder="Пункт">
                         <button @click="removeItem(index)" v-if="newCardItems.length > 3">Удалить</button>
                     </div>
+                    <button @click="addItem" v-if="newCardItems.length < 5">Добавить пункт</button>
                 </div>
+                <button @click="createCard">Создать карточку</button>
+                <p v-if="firstColumnFull" class="warning">Первая колонка заполнена (максимум 3)</p>
             </div>
-        </div>
     `,
     data: {
         columns: [
@@ -27,5 +29,16 @@ new Vue({
         newCardTitle: '',
         newCardItems: ['', '', '']
     },
-
+    methods: {
+        addItem() {
+            if (this.newCardItems.length < 5) {
+                this.newCardItems.push('');
+            }
+        },
+        removeItem(index) {
+            if (this.newCardItems.length > 3) {
+                this.newCardItems.splice(index, 1);
+            }
+        },
+    }
 })
