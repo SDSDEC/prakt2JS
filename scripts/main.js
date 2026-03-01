@@ -24,5 +24,8 @@ new Vue({
             { name: 'Выполняется (макс.5)', cards: [] },
             { name: 'Выполнено', cards: [] }
         ],
-    }
+        newCardTitle: '',
+        newCardItems: ['', '', '']
+    },
+
 })
