@@ -21,7 +21,7 @@ new Vue({
             </div>  
             <div class="board">
                 <div class="column" v-for="(column, colIndex) in columns" :key="colIndex">
-                    <h2>{{ column.name }} ({{column.cards.length }})</h2>
+                    <h2>{{ column.name }} ({{ column.cards.length }})</h2>
                     <div class="card" v-for="(card, cardIndex) in column.cards" :key="card.id" :style="{ backgroundColor: card.color }">
                         <h3>{{ card.title }}</h3>
                         <ul>
@@ -29,7 +29,7 @@ new Vue({
                                 <input type="checkbox"
                                     v-model="item.completed"
                                     @change="handleItemChange(card, colIndex, cardIndex)"
-                                    :disabled="isFirstColumnBlocked && colIndex ===0">
+                                    :disabled="isFirstColumnBlocked && colIndex === 0">
                                     {{ item.text }}
                             </li>
                         </ul>
@@ -46,6 +46,18 @@ new Vue({
         ],
         newCardTitle: '',
         newCardItems: ['', '', '']
+    },
+    computed: {
+        firstColumnFull() {
+            return this.columns[0].cards.length >= 3;
+        },
+        isFirstColumnBlocked() {
+            if (this.columns[1].cards.length < 5) return false;
+            return this.columns[0].cards.some(card=> {
+                const percent = this.getCardPercent(card);
+                return percent > 50 && percent < 100;
+            });
+        }
     },
     methods: {
         addItem() {
@@ -74,5 +86,10 @@ new Vue({
             this.newCardItems = ['', '', ''];
             }
         },
+        getCardPercent(card) {
+            const total = card.items.length;
+            const completed = card.items.filter(i => i.completed).length;
+            return total === 0 ? 0 : (completed / total) * 100;
+        }
 
 })
