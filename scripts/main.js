@@ -18,7 +18,8 @@ new Vue({
                 </div>
                 <button @click="createCard">Создать карточку</button>
                 <p v-if="firstColumnFull" class="warning">Первая колонка заполнена (максимум 3)</p>
-            </div>
+            </div>  
+        </div>        
     `,
     data: {
         columns: [
@@ -40,5 +41,9 @@ new Vue({
                 this.newCardItems.splice(index, 1);
             }
         },
+        createCard() {
+            if (!this.newCardTitle) return alert('Введите заголовок');
+            if (this.newCardItems.some(item => !item.trim())) return alert('Заполните все пункты');
+        }
     }
 })
