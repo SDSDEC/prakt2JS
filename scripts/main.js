@@ -19,6 +19,13 @@ new Vue({
                 <button @click="createCard">Создать карточку</button>
                 <p v-if="firstColumnFull" class="warning">Первая колонка заполнена (максимум 3)</p>
             </div>  
+            <div class="board">
+                <div class="column" v-for="(column, colIndex) in columns" :key="colIndex">
+                    <h2>{{ column.name }} ({{column.cards.length }})</h2>
+                    <div class="card" v-for="(card, cardIndex) in column.cards" :key="card.id" :style="{ backgroundColor: card.color }">
+                    </div>
+                </div>
+            </div>
         </div>        
     `,
     data: {
@@ -44,6 +51,18 @@ new Vue({
         createCard() {
             if (!this.newCardTitle) return alert('Введите заголовок');
             if (this.newCardItems.some(item => !item.trim())) return alert('Заполните все пункты');
-        }
-    }
+
+            const newCard = {
+                id: Date.now(),
+                title: this.newCardTitle,
+                items: this.newCardItems.map(text => ({text, completed: false})),
+                color: '#ffffff',
+                completed: null
+            };
+            this.columns[0].cards.push(newCard);
+            this.newCardTitle = '';
+            this.newCardItems = ['', '', ''];
+            }
+        },
+
 })
