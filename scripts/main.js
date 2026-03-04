@@ -73,7 +73,10 @@ new Vue({
         createCard() {
             if (!this.newCardTitle) return alert('Введите заголовок');
             if (this.newCardItems.some(item => !item.trim())) return alert('Заполните все пункты');
-
+            if (this.firstColumnFull) {
+                alert('Первая колонка заполнена');
+                return;
+            }
             const newCard = {
                 id: Date.now(),
                 title: this.newCardTitle,

@@ -44,3 +44,7 @@
 .card li {
     margin-bottom: 3px;
 }
+
+.warning {
+    color: red;
+}
