@@ -67,3 +67,11 @@
 .delete-card:hover {
     color: red;
 }
+
+.create-card input {
+    margin-right: 5px;
+}
+
+.color-select {
+    margin-top: 5px;
+}

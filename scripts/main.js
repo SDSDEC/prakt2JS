@@ -34,6 +34,14 @@ new Vue({
                                     {{ item.text }}
                             </li>
                         </ul>
+                        <div class="color-select">
+                            <select v-model="card.color" @change="forceUpdate">
+                                <option value="#ffffff">Белый</option>
+                                <option value="#ffcccc">Красный</option>
+                                <option value="#ccffcc">Зелёный</option>
+                                <option value="#ccccff">Синий</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,6 +108,9 @@ new Vue({
             if (cardIndex !== -1) {
                 column.cards.splice(cardIndex, 1);
             }
+        },
+        forceUpdate() {
+            this.$forceUpdate();
         },
     }
 })
