@@ -23,6 +23,7 @@ new Vue({
                 <div class="column" v-for="(column, colIndex) in columns" :key="colIndex">
                     <h2>{{ column.name }} ({{ column.cards.length }})</h2>
                     <div class="card" v-for="(card, cardIndex) in column.cards" :key="card.id" :style="{ backgroundColor: card.color }">
+                        <button class="delete-card" @click="removeCard(card.id, colIndex)">✖</button>
                         <h3>{{ card.title }}</h3>
                         <ul>
                             <li v-for="(item, i) in card.items" :key="i">
@@ -87,12 +88,18 @@ new Vue({
             this.columns[0].cards.push(newCard);
             this.newCardTitle = '';
             this.newCardItems = ['', '', ''];
-            }
         },
         getCardPercent(card) {
             const total = card.items.length;
             const completed = card.items.filter(i => i.completed).length;
             return total === 0 ? 0 : (completed / total) * 100;
-        }
-
+        },
+        removeCard(cardId, colIndex) {
+            const column = this.columns[colIndex];
+            const cardIndex = column.cards.findIndex(card => card.id === cardId);
+            if (cardIndex !== -1) {
+                column.cards.splice(cardIndex, 1);
+            }
+        },
+    }
 })

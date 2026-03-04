@@ -24,6 +24,7 @@
 }
 
 .card {
+    position: relative;
     background: #ffffff;
     padding: 10px;
     margin-bottom: 10px;
@@ -46,5 +47,23 @@
 }
 
 .warning {
+    color: red;
+}
+
+.delete-card {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #999;
+    padding: 0 5px;
+    line-height: 1;
+    z-index: 1;
+}
+
+.delete-card:hover {
     color: red;
 }
