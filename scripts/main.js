@@ -23,6 +23,16 @@ new Vue({
                 <div class="column" v-for="(column, colIndex) in columns" :key="colIndex">
                     <h2>{{ column.name }} ({{column.cards.length }})</h2>
                     <div class="card" v-for="(card, cardIndex) in column.cards" :key="card.id" :style="{ backgroundColor: card.color }">
+                        <h3>{{ card.title }}</h3>
+                        <ul>
+                            <li v-for="(item, i) in card.items" :key="i">
+                                <input type="checkbox"
+                                    v-model="item.completed"
+                                    @change="handleItemChange(card, colIndex, cardIndex)"
+                                    :disabled="isFirstColumnBlocked && colIndex ===0">
+                                    {{ item.text }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
