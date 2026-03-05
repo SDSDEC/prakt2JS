@@ -42,6 +42,9 @@ new Vue({
                                 <option value="#ccccff">Синий</option>
                             </select>
                         </div>
+                        <div class="completed" v-if="card.completed">
+                            Завершено: {{ card.completed }}
+                        </div>
                     </div>
                 </div>
             </div>
