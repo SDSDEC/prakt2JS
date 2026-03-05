@@ -112,5 +112,79 @@ new Vue({
         forceUpdate() {
             this.$forceUpdate();
         },
+        handleItemChange(card, colIndex, cardIndex) {
+            this.$forceUpdate();
+            this.checkAndMoveCard(card, colIndex, cardIndex);
+        },
+        checkAndMoveCard(card, colIndex, cardIndex) {
+            const percent = this.getCardPercent(card);
+            let targetCol = null;
+
+            if (colIndex === 0) {
+                if (percent === 100) {
+                    targetCol = 2;
+                } else if (percent > 50) {
+                    targetCol = 1;
+                }
+            } else if (colIndex === 1) {
+                if (percent === 100) {
+                    targetCol = 2;
+                } else if (percent <= 50) {
+                    if (this.columns[0].cards.length < 3 && !this.isFirstColumnBlocked) {
+                        targetCol = 0;
+                    }
+                }
+            } else if (colIndex === 2) {
+                if (percent < 100) {
+                    targetCol = 1;
+                }
+            }
+
+            if (targetCol !== null && targetCol !== colIndex) {
+                if (targetCol === 0 && this.columns[0].cards.length >= 3) return;
+                if (targetCol === 1 && this.columns[1].cards.length >= 5) return;
+                this.moveCard(card, colIndex, cardIndex, targetCol);
+            }
+        },
+        moveCard(card, fromColIndex, cardIndex, toColIndex) {
+            this.columns[fromColIndex].cards.splice(cardIndex, 1);
+            if (toColIndex === 2) {
+                card.completed = new Date().toLocaleString();
+            } else if (fromColIndex === 2) {
+                card.completed = null;
+            }
+            this.columns[toColIndex].cards.push(card);
+            this.$nextTick(() => {
+                this.checkFirstColumnCards();
+            });
+        },
+        checkFirstColumnCards() {
+            const firstColCards = [...this.columns[0].cards];
+            for (let card of firstColCards) {
+                const actualIndex = this.columns[0].cards.findIndex(c => c.id === card.id);
+                if (actualIndex === -1) continue;
+                const percent = this.getCardPercent(card);
+                if (percent === 100) {
+                    this.moveCard(card, 0, actualIndex, 2);
+                } else if (percent > 50 && this.columns[1].cards.length < 5) {
+                    this.moveCard(card, 0, actualIndex, 1);
+                }
+            }
+        }
+    },
+    watch: {
+        columns: {
+            handler() {
+                localStorage.setItem('noteAppData', JSON.stringify(this.columns));
+            },
+            deep: true
+        }
+    },
+    mounted() {
+        const saved = localStorage.getItem('noteAppData');
+        if (saved) {
+            this.columns = JSON.parse(saved);
+
+        }
     }
-})
+});
